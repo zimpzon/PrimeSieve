@@ -41,6 +41,7 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
+        file: PrimeSieve/Dockerfile
         push: true
         tags: |
           ghcr.io/zimpzon/primesieve:latest
