@@ -15,9 +15,9 @@ jobs:
         with:
           dotnet-version: '10.x'
 
-      - run: dotnet restore YourSolution.slnx
-      - run: dotnet build YourSolution.slnx --no-restore
-      - run: dotnet test YourSolution.slnx --no-build
+      - run: dotnet restore PrimeSieve.slnx
+      - run: dotnet build PrimeSieve.slnx --no-restore
+      - run: dotnet test PrimeSieve.slnx --no-build
 
   docker:
     needs: build
@@ -27,21 +27,21 @@ jobs:
       contents: read
       packages: write
 
-      steps:
-      - uses: actions/checkout@v4
+    steps:
+    - uses: actions/checkout@v4
 
-      - name: Log in to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Log in to GHCR
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: |
-            ghcr.io/${{ github.repository }}:latest
-            ghcr.io/${{ github.repository }}:${{ github.sha }}
+    - name: Build and push
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        push: true
+        tags: |
+          ghcr.io/${{ github.repository }}:latest
+          ghcr.io/${{ github.repository }}:${{ github.sha }}
