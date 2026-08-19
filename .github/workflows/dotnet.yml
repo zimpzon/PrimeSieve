@@ -20,11 +20,10 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore
-        run: dotnet restore MyProject.slnx
+        run: dotnet restore PrimeSieve.slnx
 
       - name: Build
-        run: dotnet build MyProject.slnx --no-restore --configuration Release
+        run: dotnet build PrimeSieve.slnx --no-restore --configuration Release
 
       - name: Test
-        run: dotnet test MyProject.slnx --no-build --configuration Release
-        
+        run: dotnet test PrimeSieve.slnx --no-build --configuration Release
