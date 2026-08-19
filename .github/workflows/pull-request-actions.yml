@@ -1,0 +1,20 @@
+name: Pull Request
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - run: dotnet restore YourSolution.slnx
+      - run: dotnet build YourSolution.slnx --no-restore
+      - run: dotnet test YourSolution.slnx --no-build
