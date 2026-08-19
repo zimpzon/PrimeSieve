@@ -43,5 +43,5 @@ jobs:
         context: .
         push: true
         tags: |
-          ghcr.io/${{ github.repository }}:latest
-          ghcr.io/${{ github.repository }}:${{ github.sha }}
+          ghcr.io/zimpzon/primesieve:latest
+          ghcr.io/zimpzon/primesieve:${{ github.sha }}
