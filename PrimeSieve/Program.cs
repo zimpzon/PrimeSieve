@@ -1,4 +1,7 @@
 
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+
 namespace PrimeSieve
 {
     public class Program
@@ -12,6 +15,16 @@ namespace PrimeSieve
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+
+            static void ConfigureOpenTelemetryResource(ResourceBuilder builder)
+                => builder.AddService(serviceName: "PrimeSieve", serviceVersion: "1.0.0");
+
+            static void ConfigureOpenTelemetryTracing(TracerProviderBuilder builder)
+                => builder.AddAspNetCoreInstrumentation().AddOtlpExporter();
+                
+            builder.Services.AddOpenTelemetry()
+                .ConfigureResource(ConfigureOpenTelemetryResource)
+                .WithTracing(ConfigureOpenTelemetryTracing);
 
             var app = builder.Build();
 
