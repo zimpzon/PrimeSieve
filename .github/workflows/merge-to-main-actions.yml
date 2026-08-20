@@ -43,6 +43,7 @@ jobs:
         context: .
         file: PrimeSieve/Dockerfile
         push: true
+        platforms: linux/arm64
         tags: |
           ghcr.io/zimpzon/primesieve:latest
           ghcr.io/zimpzon/primesieve:${{ github.sha }}
