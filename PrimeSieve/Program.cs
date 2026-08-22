@@ -1,4 +1,5 @@
 
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
@@ -16,15 +17,25 @@ namespace PrimeSieve
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
-            static void ConfigureOpenTelemetryResource(ResourceBuilder builder)
-                => builder.AddService(serviceName: "PrimeSieve", serviceVersion: "1.0.0");
-
-            static void ConfigureOpenTelemetryTracing(TracerProviderBuilder builder)
-                => builder.AddAspNetCoreInstrumentation().AddOtlpExporter();
-                
-            builder.Services.AddOpenTelemetry()
-                .ConfigureResource(ConfigureOpenTelemetryResource)
-                .WithTracing(ConfigureOpenTelemetryTracing);
+            builder.Services
+                .AddOpenTelemetry()
+                .ConfigureResource(resource => resource
+                    .AddService(
+                        serviceName: "PrimeSieve",
+                        serviceVersion: "1.0.0"))
+                .WithTracing(tracing =>
+                {
+                    tracing
+                        .AddAspNetCoreInstrumentation()
+                        .AddOtlpExporter();
+                })
+                .WithMetrics(metrics =>
+                {
+                    metrics
+                        .AddAspNetCoreInstrumentation()
+                        .AddRuntimeInstrumentation()
+                        .AddOtlpExporter();
+                });
 
             var app = builder.Build();
 
@@ -34,10 +45,7 @@ namespace PrimeSieve
                 app.MapOpenApi();
             }
 
-            app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
 
             app.MapControllers();
 
